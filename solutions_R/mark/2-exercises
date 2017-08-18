@@ -1,0 +1,185 @@
+1 a – good performance because the predictors size is small
+1 b – poor performance because there are so many predictors
+1 c - 
+1 d - 
+
+2 a – regression (measuring salary amount given the 3 inputs) n = 500, p = 3
+2 b – classification (success or failure) n = 20, p = 13
+2 c – regression (predicting the % change) n = 52, p = 3
+
+3 a - 
+
+4 a - 
+
+8 – in file 2.8.Rdata
+
+9
+a) Qualitative: origin and name. Quantitative: everything else. Origin has no ordering nor meaning, it just happens to assign a numerical value to an origin so I see this predictor as being qualitative.
+b) Ranges (you can use range(Auto[1:392,1]) or summary(Auto) for everything at once):
+Mpg: 9.0 - 46.6
+cylinders: 3 – 8
+displacement: 68 – 455
+horsepower: 46 – 230
+weight: 1613 – 5140
+acceleration: 8 – 24.8
+year: 70 – 82
+c)  i = i+1;names(Auto)[i];"mean"; mean(Auto[1:auto_rows,i]); "sd";sd(Auto[1:auto_rows,i])
+a) todo: make the above into a method that takes an array of columns
+mpg: mean = 23.45, sd=7.81
+cylinders: mean = 5.47, sd = 1.71
+displacement: mean = 194.412, sd = 104.644
+…
+d)  row_segment = c(seq(1,9),seq(86,auto_rows))
+a) question: how to do this by subtracting one list from another?
+mpg: mean = 24.4, sd = 7.87
+cylinders: mean = 5.37, sd = 1.65
+displacement: mean = 187.24, sd =  99.68
+…
+e)  
+pairs(Auto)
+the charts are very small, but some trends are appearing, such as:
+1. positive correlation between horsepower and weight
+2. negative correlation between horsepower and acceleration
+3. positive correlation between displacement and both horsepower and weight
+
+plot(mpg~cylinders, Auto)
+it looks like as the cylinder count goes up, the mpg goes down.
+f) There appear to be a number of correlations in the data relating to mpg and other variables.
+Positively correlated: year
+negatively correlated: cylinders, displacement, horsepower, weight
+
+10
+a) 506 rows, 14 columns. The rows each represent a town in Boston. Each column represents a quantitative value such as crime rate or median home value. Here are the column names: "crim" "zn"      "indus"   "chas"    "nox"     "rm"      "age"    "dis"     "rad"     "tax" "ptratio" "black"   "lstat"   "medv"
+b) There are some correlations that appear in pairs(Boston)
+
+median value (medv) negatively correlated to:
+lstat (lower status of population)
+age
+nox (nitrogen oxide concentration)
+indus (non-retail business acres), although has some outliers
+crim
+medv is positively correlated to:
+rm (average number of rooms)
+dis (distance to employment centers)
+c)
+positively correlated
+age
+nox
+lstat (lower population status)
+black (1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town)
+negatively correlated
+dis
+chas (potentially useless variable that denotes being next to a particular river or not)
+medv
+d)
+Predictor
+Min
+Max
+Sd
+Mean
+Crim
+.00632
+88.9762
+8.60154
+3.677
+Zn
+0
+100
+23.32245
+11.36
+Indus
+0.46
+27.74
+6.86035
+11.14
+Chas
+0
+1
+0.25399
+0.06917
+Nox
+0.385
+0.871
+0.115877
+0.5547
+Rm
+3.561
+8.78
+0.702617
+6.285
+Age
+2.9
+100
+28.14886
+68.57
+Dis
+1.13
+12.127
+2.10571
+3.795
+Rad
+1
+24
+8.70725
+9.549
+Tax
+187
+711
+168.5371
+408.2
+Ptratio
+12.6
+22
+2.16494
+18.46
+Black
+0.32
+396.9
+91.29486
+356.67
+Lstat
+1.73
+37.97
+7.14106
+12.65
+Medv
+5
+50
+9.1971
+22.53
+The tax has the highest standard deviation at 168.
+
+e) table(Boston[1:506,4], Boston$chas > 0)
+0: 471
+1: 35 – this many suburbs bound the river
+
+f) ptratio median: 19.05
+
+g) there are 2 rows that have a minimum medv of 5.
+
+lowest_median = table(Boston[1:506, 14], Boston$medv == 5.0)
+> lowest_median
+      
+       FALSE TRUE
+  5        0    2
+  5.6      1    0
+  6.3      1    0
+
+I located the data points using identify() on a plot of medv. They are 399 and 406.
+
+Here are the 2 rows:
+
+crim zn indus chas   nox    rm age    dis rad tax ptratio  black lstat
+399 38.3518  0  18.1    0 0.693 5.453 100 1.4896  24 666    20.2 396.90 30.59
+406 67.9208  0  18.1    0 0.693 5.683 100 1.4254  24 666    20.2 384.97 22.98
+    medv
+399    5
+406    5
+
+h) seven or more rooms: 64
+eight or more rooms: 13
+
+this is how I calculated this, is there a better way?
+
+eightplus_rooms = table(Boston[1:506, 6], Boston$rm >= 8)
+sum(eightplus_rooms[1:446,2])
