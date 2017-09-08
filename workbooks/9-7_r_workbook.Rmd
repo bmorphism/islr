@@ -1,0 +1,18 @@
+```{r}
+library(MASS)
+library(ISLR)
+
+fix(Boston)
+
+lm.fit=lm(medv~lstat,data=Boston)
+
+
+```
+```{r}
+summary(lm.fit)
+predict(lm.fit,data.frame(lstat=c(5,10,15)),
+        interval = "confidence")
+plot(lstat,medv)
+abline(lm.fit)
+```
+
